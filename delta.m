@@ -32,7 +32,7 @@ for i=1:epochs
 
     plot(patterns(1,find(targets>0)),patterns(2,find(targets>0)),'*',patterns(1,find(targets<0)),patterns(2,find(targets<0)),'+',[p(1), p(1)]*k + [-p(2), p(2)]/l,[p(2), p(2)]*k + [p(1), -p(1)]/l, '-');
 
-    pause()
+    %pause()
 
 end
 
