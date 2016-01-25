@@ -24,6 +24,8 @@ for i=1:epochs
     dW = -n*(W*X-T)*X.'
     W = W + dW
     
+    axis ([-2, 2, -2, 2], 'square');
+    
     p = W(1,1:2);
     k = -W(1, insize+1) / (p*p');
     l = sqrt(p*p');
