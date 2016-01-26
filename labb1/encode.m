@@ -1,21 +1,25 @@
-X = [patterns; ones(1,200)];
+
+patterns=eye(8)*2-1
+targets=patterns
+
+X = [patterns; ones(1,8)];
 T = targets;
 
 % generera vikt verktor random element n?ra 0.  
 
 eta = 0.001;
 alpha = 0.9;
-hidden = 100;
+hidden = 3;
 [insize, ndata] = size(patterns);
 [outsize, ndata] = size(targets);
 
 
-v = rand(outsize,hidden+1)*0.1;
 w = rand(hidden,(insize+1))*0.1;
+v = rand(outsize,hidden+1)*0.1;
+
+
 dv = zeros(outsize,(hidden+1));
 dw = zeros(hidden,(insize+1));
-
-
 
 epoch = 200; 
 
@@ -24,9 +28,9 @@ epoch = 200;
 
 error=(1:epoch)
 
-for i = 1:epoch 
-   %Fram?t
-   
+for i = 1:epoch
+    
+    %Fram?t
     hin = w * X;
     hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)];
     oin = v * hout;
@@ -47,8 +51,6 @@ for i = 1:epoch
     k = -w(1, insize+1) / (p*p');
     l = sqrt(p*p');
     
-    plot(patterns(1,find(targets>0)),patterns(2,find(targets>0)),'*',patterns(1,find(targets<0)),patterns(2,find(targets<0)),'+',[p(1), p(1)]*k + [-p(2), p(2)]/l,[p(2), p(2)]*k + [p(1), -p(1)]/l, '-');
-
     error(i) = sum(sum(abs(sign(out) - targets)./2));
     
     %Error expalined:
@@ -58,6 +60,7 @@ for i = 1:epoch
     %3: we then sum each row for it self
     %4: now we have a vector with numbers
     %5: the second sum sums the vector
+    
 end
 
 
