@@ -2,7 +2,7 @@
 X = [patterns;ones(1,200)]
 
 %generate weigths close to zero
-W = rand(1,3)*0.1
+W = rand(1,3)* 2/sqrt(insize) - 1/sqrt(insize);
 orW=W
 
 %init n (learning rate)

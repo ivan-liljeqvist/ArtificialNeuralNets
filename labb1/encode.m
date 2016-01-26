@@ -14,8 +14,8 @@ hidden = 3;
 [outsize, ndata] = size(targets);
 
 
-w = rand(hidden,(insize+1))*0.1;
-v = rand(outsize,hidden+1)*0.1;
+w = rand(hidden,(insize+1))* 2/sqrt(insize) - 1/sqrt(insize);
+v = rand(outsize,hidden+1)* 2/sqrt(insize) - 1/sqrt(insize);
 
 
 dv = zeros(outsize,(hidden+1));

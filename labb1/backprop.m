@@ -10,8 +10,8 @@ hidden = 100;
 [outsize, ndata] = size(targets);
 
 
-v = rand(outsize,hidden+1)*0.1;
-w = rand(hidden,(insize+1))*0.1;
+v = rand(outsize,hidden+1)* 2/sqrt(insize) - 1/sqrt(insize);;
+w = rand(hidden,(insize+1))* 2/sqrt(insize) - 1/sqrt(insize);;
 dv = zeros(outsize,(hidden+1));
 dw = zeros(hidden,(insize+1));
 
@@ -61,7 +61,7 @@ for i = 1:epoch
 end
 
 
-%plot(error)
+plot(error)
 
 
 
