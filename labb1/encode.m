@@ -49,7 +49,7 @@ for i = 1:epoch
     delta_h = (v' * delta_o) .* ((1 + hout) .* (1 - hout)) * 0.5;
     delta_h = delta_h(1:hidden, :);
     
-    %Viktuppdatering
+    %Weight update
     dw = (dw .* alpha) - (delta_h * X') .* (1-alpha); %momentum - (Alpha*old sw)
     dv = (dv .* alpha) - (delta_o * hout') .* (1-alpha);
     w = w + dw .* eta;
