@@ -1,4 +1,11 @@
 
+
+% if we change eta to smaller values we need to increase epochs alot
+% backdrop will converge eventually, but it depends on the eta if it will
+% be fast or not. Too large eta will converge fast, but may start
+% oscillating, too small eta will converge but slowly
+
+
 patterns=eye(8)*2-1
 targets=patterns
 
@@ -7,7 +14,7 @@ T = targets;
 
 % generera vikt verktor random element n?ra 0.  
 
-eta = 0.001;
+eta = 0.05;
 alpha = 0.9;
 hidden = 3;
 [insize, ndata] = size(patterns);
@@ -21,7 +28,7 @@ v = rand(outsize,hidden+1)* 2/sqrt(insize) - 1/sqrt(insize);
 dv = zeros(outsize,(hidden+1));
 dw = zeros(hidden,(insize+1));
 
-epoch = 200; 
+epoch = 2000; 
 
 %DELTA REGELN
 %dW = -n*(W*X - T)*X.';
@@ -30,26 +37,24 @@ error=(1:epoch)
 
 for i = 1:epoch
     
-    %Fram?t
-    hin = w * X;
-    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)];
+    %Forward
+    
+    hin = w * X; % input * weights = weighted inputs
+    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)]; % apply transfer func and add 
     oin = v * hout;
     out = 2 ./ (1+exp(-oin)) - 1;
     
-    %Bak?t
+    %Backward
     delta_o = (out - targets) .* ((1 + out) .* (1 - out)) * 0.5;
     delta_h = (v' * delta_o) .* ((1 + hout) .* (1 - hout)) * 0.5;
     delta_h = delta_h(1:hidden, :);
     
     %Viktuppdatering
-    dw = (dw .* alpha) - (delta_h * X') .* (1-alpha);
+    dw = (dw .* alpha) - (delta_h * X') .* (1-alpha); %momentum - (Alpha*old sw)
     dv = (dv .* alpha) - (delta_o * hout') .* (1-alpha);
     w = w + dw .* eta;
     v = v + dv .* eta;
-    
-    p = w(1,1:2);
-    k = -w(1, insize+1) / (p*p');
-    l = sqrt(p*p');
+   
     
     error(i) = sum(sum(abs(sign(out) - targets)./2));
     

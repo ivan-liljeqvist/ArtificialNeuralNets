@@ -1,7 +1,8 @@
 
 %define variables
-hidden=200
-epoch=300
+hidden=200;
+epoch=300;
+n = 20;
 
 %the bottom plane is X and Y
 x=[-5:1:5]';
@@ -22,6 +23,19 @@ targets = reshape (z, 1, ndata);
 [xx, yy] = meshgrid (x, y);
 %Create a matrix 
 patterns = [reshape(xx, 1, ndata); reshape(yy, 1, ndata)];
+
+%randomize the matrixes
+permute = randperm(size(targets,2));
+[p1, inv_perm] = sort(permute);
+patterns = patterns(:, permute);
+targets = targets(:, permute);
+
+sub_patterns = patterns(:, 1:n);
+sub_patterns2 = patterns(:, n:gridsize);
+
+sub_targets = targets(:, 1:n);
+sub_targets2 = targets(:, n:gridsize);
+
 
 [insize, ndata] = size(patterns);
 [outsize, ndata] = size(targets);
@@ -46,32 +60,53 @@ dv = zeros(outsize,(hidden+1));
 dw = zeros(hidden,(insize+1));
 
 X = [patterns; ones(1,ndata)];
+X1 = [sub_patterns; ones(1, n)];
 
 
 for i = 1:epoch 
+    
+    %FIRST PASS
+    
     %Forward
-    hin = w * X;
-    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)];
+    hin = w * X1;
+    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,n)];
     oin = v * hout;
     out = 2 ./ (1+exp(-oin)) - 1;
     
     %Backprop
-    delta_o = (out - targets) .* ((1 + out) .* (1 - out)) * 0.5;
+    delta_o = (out - sub_targets) .* ((1 + out) .* (1 - out)) * 0.5;
     delta_h = (v' * delta_o) .* ((1 + hout) .* (1 - hout)) * 0.5;
     delta_h = delta_h(1:hidden, :);
     
     %Update weights
-    dw = (dw .* alpha) - (delta_h * X') .* (1-alpha);
+    dw = (dw .* alpha) - (delta_h * X1') .* (1-alpha);
     dv = (dv .* alpha) - (delta_o * hout') .* (1-alpha);
     w = w + dw .* eta;
     v = v + dv .* eta;
     
-    zz = reshape(out, gridsize, gridsize);
-    mesh(x,y,zz);
-    axis([-5 5 -5 5 -0.7 0.7]);
-    drawnow;
     
     
+
 end
+
+
+%SECOND PASS
+    
+hin = w * X;
+hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)];
+oin = v * hout;
+out = 2 ./ (1+exp(-oin)) - 1;
+
+ordered_out = out(:,inv_perm);
+
+zz = reshape(ordered_out, gridsize, gridsize);
+mesh(x,y,zz);
+axis([-5 5 -5 5 -0.7 0.7]);
+drawnow;
+
+error = sum(sum(abs(sign(out) - targets)./2))
+
+
+
 
 
