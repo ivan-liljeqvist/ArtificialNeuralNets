@@ -2,7 +2,7 @@
 %define variables
 hidden=200;
 epoch=300;
-n = 20;
+n = 121;
 
 %the bottom plane is X and Y
 x=[-5:1:5]';
@@ -107,6 +107,9 @@ drawnow;
 error = sum(sum(abs(sign(out) - targets)./2))
 
 
-
+%we get 40 error because we have too few data points, if we decrease
+%stepsize in input we'll get a small error. If we give a subset then the
+%function wont know how to fit the curve. (Blue lines in the lecture). so
+%we'll get an area (calculated with Beysian) where the real chart could be
 
 
