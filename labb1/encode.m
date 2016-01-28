@@ -33,16 +33,22 @@ epoch = 2000;
 %DELTA REGELN
 %dW = -n*(W*X - T)*X.';
 
-error=(1:epoch)
+error=(1:epoch);
 
 for i = 1:epoch
     
     %Forward
     
-    hin = w * X; % input * weights = weighted inputs
-    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)]; % apply transfer func and add 
+    hin = w * X; % weights * input = weighted inputs
+    hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)]; % apply transfer func and add ones for bias
     oin = v * hout;
     out = 2 ./ (1+exp(-oin)) - 1;
+    
+    if i<2000 
+          hout
+          v
+          out
+    end
     
     %Backward
     delta_o = (out - targets) .* ((1 + out) .* (1 - out)) * 0.5;
@@ -66,6 +72,19 @@ for i = 1:epoch
     %4: now we have a vector with numbers
     %5: the second sum sums the vector
     
+    
+    %ENCODER: the network found such weights that we got the desired
+    %pattern in the output. 
+    
+    %Elements in the diagonal are positive because
+    %the weights are chosen by the network so that they cancel out any
+    %negative terms.
+    
+    %Other elements should be negative so the network chooses such weights
+    %so that the negative values cancel out the positive.
+    
+    %Could be someting to do with binary. The hidden layer can store 2^3
+    %values which is 8 and is the maximum required.
 end
 
 
