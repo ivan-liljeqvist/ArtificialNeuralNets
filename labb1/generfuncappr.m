@@ -2,10 +2,10 @@
 %define variables
 hidden=200;
 epoch=300;
-n = 121;
+
 
 %the bottom plane is X and Y
-x=[-5:1:5]';
+x=[-5:0.1:5]';
 y=x;
 %the terrain is Z.
 z=exp(-x.*x*0.1) * exp(-y.*y*0.1)' - 0.5;
@@ -15,6 +15,8 @@ gridsize = size(x, 1);
 ndata = gridsize*gridsize;
 eta = 0.001;
 alpha = 0.9;
+
+n = gridsize;
 
 
 %Transform z into a vector with 1 rows and num_points columns
@@ -107,9 +109,20 @@ drawnow;
 error = sum(sum(abs(sign(out) - targets)./2))
 
 
-%we get 40 error because we have too few data points, if we decrease
+%we get 40 error when we run with all datapoints because we have too few data points, if we decrease
 %stepsize in input we'll get a small error. If we give a subset then the
 %function wont know how to fit the curve. (Blue lines in the lecture). so
 %we'll get an area (calculated with Beysian) where the real chart could be
+
+
+%If we take too small stepsize, we run the risk of overfitting. We need to:
+
+%1) adjust Hidden (number of nodes) so that we dont have too many and not too
+%few. Too many = not needed weights, will try to go towards zero, but with
+%time the values still can accumulate. Too few = too few nodes to describe
+%the problem.
+
+%2)adjust Epochs. If too few = not enough epochs to learn. If too many =
+%the network can go in unexpected direction?? (not sure)
 
 
