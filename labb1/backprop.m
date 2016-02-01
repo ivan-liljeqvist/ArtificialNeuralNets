@@ -3,9 +3,9 @@ T = targets;
 
 % generera vikt verktor random element n?ra 0.  
 
-eta = 0.001;
+eta = 0.01;
 alpha = 0.9;
-hidden = 100;
+hidden = 40;
 [insize, ndata] = size(patterns);
 [outsize, ndata] = size(targets);
 
@@ -17,7 +17,7 @@ dw = zeros(hidden,(insize+1));
 
 
 
-epoch = 200; 
+epoch = 500; 
 
 %DELTA REGELN
 %dW = -n*(W*X - T)*X.';
@@ -37,7 +37,7 @@ for i = 1:epoch
     delta_h = (v' * delta_o) .* ((1 + hout) .* (1 - hout)) * 0.5;
     delta_h = delta_h(1:hidden, :);
     
-    %Update weights
+    %Update weights (X and hout are hj in the math..)
     dw = (dw .* alpha) - (delta_h * X') .* (1-alpha);
     dv = (dv .* alpha) - (delta_o * hout') .* (1-alpha);
     w = w + dw .* eta;

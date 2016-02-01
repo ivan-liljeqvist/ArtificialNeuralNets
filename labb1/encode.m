@@ -37,7 +37,7 @@ error=(1:epoch);
 
 for i = 1:epoch
     
-    %Forward
+    %FORWARD
     
     hin = w * X; % weights * input = weighted inputs
     hout = [2 ./ (1+exp(-hin)) - 1 ; ones(1,ndata)]; % apply transfer func and add ones for bias
@@ -50,14 +50,16 @@ for i = 1:epoch
           out
     end
     
-    %Backward
+    %BACKWARD, here we do all the derivative math
     delta_o = (out - targets) .* ((1 + out) .* (1 - out)) * 0.5;
     delta_h = (v' * delta_o) .* ((1 + hout) .* (1 - hout)) * 0.5;
     delta_h = delta_h(1:hidden, :);
     
-    %Weight update
+    %UPDATE WEIGHTS, here we apply the momentum
     dw = (dw .* alpha) - (delta_h * X') .* (1-alpha); %momentum - (Alpha*old sw)
     dv = (dv .* alpha) - (delta_o * hout') .* (1-alpha);
+    
+    %Update the weights with learning rate
     w = w + dw .* eta;
     v = v + dv .* eta;
    

@@ -21,7 +21,7 @@ T=targets
 
 %learn according to fomula
 for i=1:epochs
-    dW = -n*(W*X-T)*X.'
+    dW = -n*(W*X-T)*X.' 
     W = W + dW
     
     axis ([-2, 2, -2, 2], 'square');

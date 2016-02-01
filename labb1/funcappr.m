@@ -4,7 +4,7 @@ hidden=200
 epoch=300
 
 %the bottom plane is X and Y
-x=[-5:1:5]';
+x=[-5:0.1:5]';
 y=x;
 %the terrain is Z.
 z=exp(-x.*x*0.1) * exp(-y.*y*0.1)' - 0.5;
