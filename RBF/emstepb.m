@@ -23,6 +23,9 @@ etha=etha*0;
 var=var*0+0.0001;
 
 dims=cols(m);
+
+%FIRST PASS
+
 while i>0
   %find distance and difference between all unit positions and the data point
   [sqdst df]=sqdist(oldm,data(i,:));
@@ -40,6 +43,9 @@ while i>0
   var=(var+act*(data(i,:)*data(i,:)'));
   i=i-1;
 end
+
+%SECOND PASS
+
 m=divvec(m,etha);
 var=((var./etha)-mulrows(m,m))/dims;
 etha=etha/sum(etha);
