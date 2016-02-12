@@ -1,12 +1,15 @@
 
+votes1
+mpsex1
+mpparty1
+mpdistrict1
 
-w = rand(100,84);
+w = rand(100,31);
 epochs = 20;
 
-stepsize = 0.2;
-num_animals = 32;
+num_mp = 349;
 
-neightbourhood = 6;
+neightbourhood = 20;
 
 eta=0.2;
 
@@ -16,15 +19,15 @@ pos = [];
 for e=1:epochs
 
     %innerloop
-    for anim=1:num_animals
+    for mp=1:num_mp
         
         %get info about animal
-        p = props(anim,:)
+        p = votes(mp,:)
         
         diffMat = bsxfun(@minus,w,p); 
         %caltulate the length of all diff-vectors
         normDiffMat = arrayfun(@(idx) norm(diffMat(idx,:)), 1:size(diffMat,1));
-        [ignore,shortestIndex] = min(normDiffMat)
+        [ignore,shortestIndex] = min(normDiffMat);
         
         %find the bound for rows to update
         startUpdateIndex = shortestIndex-neightbourhood;
@@ -43,7 +46,7 @@ for e=1:epochs
     end
     
     
-    if(neightbourhood>3) 
+    if(neightbourhood>1) 
         neightbourhood = neightbourhood - 1;
     end
     
@@ -52,18 +55,24 @@ end
 
 
 
-for anim=1:num_animals
+for mp=1:num_mp
     
     %get info about animal
-    p = props(anim,:)
+    p = votes(mp,:)
     diffMat = bsxfun(@minus,p,w); 
     %caltulate the length of all diff-vectors
     normDiffMat = arrayfun(@(idx) norm(diffMat(idx,:)), 1:size(diffMat,1));
-    [ignore,shortestIndex] = min(normDiffMat)
+    [ignore,shortestIndex] = min(normDiffMat);
     
-    pos(anim) = shortestIndex
+    pos(mp) = shortestIndex;
+   
     
-
 end
-[dummy, order] = sort(pos);
-snames(order)'
+
+a = ones(1,100)*350;
+a(pos) = 1:349;
+    
+p=[mpsex;0];
+image(p(reshape(a,10,10))+1);
+
+
