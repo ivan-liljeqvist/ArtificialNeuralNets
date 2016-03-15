@@ -71,8 +71,11 @@ end
 
 a = ones(1,100)*350;
 a(pos) = 1:349;
-    
-p=[mpsex;0];
+
+mpdist2=mpdistrict+1
+mpsex2=mpdis+1
+
+p=[mpdist2;0];
 image(p(reshape(a,10,10))+1);
 
 
